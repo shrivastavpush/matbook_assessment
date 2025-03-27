@@ -4,7 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import Input from "../components/Auth/Input";
 import AuthLayout from "../components/Layouts/AuthLayout";
 import SocialContainer from "../components/Auth/SocialContainer";
-import Button from "../components/Auth/Button";
+import Button from "../components/Button";
 
 const Login = () => {
     const [email, setEmail] = useState("");
