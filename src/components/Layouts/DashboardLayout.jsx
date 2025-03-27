@@ -1,19 +1,14 @@
+import React, { useContext, useState, useEffect } from "react";
 import Header from "../Dashboard/Header";
 import SearchBar from "../Dashboard/SearchBar";
 import AddWorkflowButton from "../Dashboard/AddWorkFlowButton";
 import WorkflowTable from "../Dashboard/WorkFlowList";
-import { useState, useEffect } from "react";
+import { WorkDataContext } from "../../context/WorkDataContext";
 
 const DashboardLayout = () => {
-    const [workflows, setWorkflows] = useState([
-        { id: 1, name: "Workflow 1", lastEdited: "2021-01-01" },
-        { id: 2, name: "Workflow 2", lastEdited: "2021-01-01" },
-        { id: 3, name: "Workflow 3", lastEdited: "2021-01-01" },
-        { id: 4, name: "Workflow 4", lastEdited: "2021-01-01" },
-        { id: 5, name: "Workflow 5", lastEdited: "2021-01-01" }
-    ]);
+    const { workflows, mockAddWorkflow } = useContext(WorkDataContext);
 
-    const [filteredWorkflows, setFilteredWorkflows] = useState(workflows);
+    const [filteredWorkflows, setFilteredWorkflows] = useState([]);
 
     useEffect(() => {
         setFilteredWorkflows(workflows);
@@ -26,13 +21,17 @@ const DashboardLayout = () => {
                 workflow.name.toLowerCase().includes(lowercasedQuery) ||
                 workflow.id.toString().includes(lowercasedQuery)
         );
-
-        console.log("Filtered Workflows:", filtered);
         setFilteredWorkflows(filtered);
     };
 
     const handleAddWorkflow = () => {
-        console.log("Add Workflow");
+        const newWorkflow = {
+            id: Math.max(0, ...workflows.map((w) => w.id)) + 1,
+            name: `Workflow ${workflows.length + 1}`,
+            lastEdited: new Date().toISOString().split("T")[0],
+            description: `Description for Workflow ${workflows.length + 1}`,
+        };
+        mockAddWorkflow(newWorkflow);
     };
 
     return (

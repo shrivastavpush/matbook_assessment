@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoutes";
 import Signup from "./pages/Signup";
-
+import { WorkDataProvider } from "./context/WorkDataContext";
 function App() {
   return (
     <AuthProvider>
@@ -14,7 +14,11 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/dashboard" element={<PrivateRoute>
+            <WorkDataProvider>
+              <Dashboard />
+            </WorkDataProvider>
+          </PrivateRoute>} />
         </Routes>
       </Router>
     </AuthProvider>

@@ -9,6 +9,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
     const handleLogout = async () => {
         await logout();
+        localStorage.clear();
         navigate("/login");
     };
 

@@ -1,10 +1,16 @@
 import { useState } from "react";
 import { IoEllipsisVertical } from "react-icons/io5";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { MdOutlinePushPin } from "react-icons/md";
+import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
+import DefaultPin from '../../assets/pin-default.svg'
+import PinnedPin from '../../assets/pin-active.svg'
+
+import SmallButton from "../SmallButton";
+import WarningModal from "../Modals/WarningModal";
 
 const WorkflowList = ({ workflows }) => {
     const [pinned, setPinned] = useState({});
+    const [showExecuteModal, setShowExecuteModal] = useState(false);
+    const [selectedWorkflow, setSelectedWorkflow] = useState("null");
 
     const togglePin = (id) => {
         setPinned((prev) => ({
@@ -17,63 +23,98 @@ const WorkflowList = ({ workflows }) => {
         return <p className="text-center text-gray-500">No workflows found.</p>;
     }
 
-    const handleWorkflowClick = (id) => {
+    const handleWorkflowClick = (id, e) => {
+        e.stopPropagation();
         console.log(`Workflow ${id} clicked`);
     };
 
+    const handleExecuteWorkflow = (workflow, e) => {
+        e.stopPropagation();
+        setSelectedWorkflow(workflow);
+        setShowExecuteModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowExecuteModal(false);
+        setSelectedWorkflow(null);
+    };
+
+    const handleEditWorkflow = (workflow, e) => {
+        e.stopPropagation();
+        console.log(`Workflow ${workflow.id} edited`);
+    };
+
+    const handleConfirmExecution = () => {
+        console.log(`Executing workflow: ${selectedWorkflow?.id}`);
+        setShowExecuteModal(false);
+        setSelectedWorkflow(null);
+    };
+
     return (
-        <div className="bg-white rounded-lg mx-20 p-10">
+        <div className="bg-white rounded-lg mx-20 p-10 shadow-xl">
             <table className="w-full border-collapse">
                 <thead>
-                    <tr className="text-left text-gray-600 border-b-2 border-orange-500">
-                        <th className="p-3">Workflow Name</th>
-                        <th className="p-3">ID</th>
-                        <th className="p-3">Last Edited On</th>
-                        <th className="p-3">Description</th>
-                        <th className="p-3"></th>
-                        <th className="p-3"></th>
-                        <th className="p-3"></th>
+                    <tr className="text-left text-gray-600 border-b-2 border-orange-500 ">
+                        <th className="p-2 text-[14px] font-medium text-black">Workflow Name</th>
+                        <th className="p-2 text-[14px] font-medium text-black">ID</th>
+                        <th className="py-2 pr-6 text-[14px] font-medium text-black">Last Edited On</th>
+                        <th className="p-2 text-[14px] font-medium text-black">Description</th>
+                        <th className="p-2"></th>
+                        <th className="p-2"></th>
+                        <th className="p-2"></th>
                     </tr>
                 </thead>
+
                 <tbody>
                     {workflows.map((workflow) => (
-                        <tr key={workflow.id}
+                        <tr key={`workflow-${workflow.id}`}
                             className="border-b hover:bg-gray-100 transition cursor-pointer"
-                            onClick={() => handleWorkflowClick(workflow.id)}>
-                            <td className="p-3 text-gray-800">{workflow.name}</td>
-                            <td className="p-3 text-gray-600 font-medium">#{workflow.id}</td>
-                            <td className="p-3 text-gray-600">{workflow.lastEdited}</td>
-                            <td className="p-3 text-gray-500 truncate">
+                            onClick={(e) => handleWorkflowClick(workflow.id, e)}>
+                            <td className="py-5 px-2 text-gray-800 max-w-[120px] truncate">{workflow.name}</td>
+                            <td className="py-5 px-2 text-gray-600 font-medium max-w-[80px] truncate">#{workflow.id}</td>
+                            <td className="py-5 px-2  pr-6 text-gray-600 max-w-[200px] truncate">{workflow.lastEdited}</td>
+                            <td className="py-5 px-2 text-gray-500 max-w-[220px] truncate">
                                 {workflow.description}
                             </td>
-                            <td className="p-3 text-center">
-                                <MdOutlinePushPin
-                                    className={`cursor-pointer rotate-45 ${pinned[workflow.id] ? "text-yellow-500" : "text-gray-400"
-                                        }`}
+                            <td className="py-5 px-2 text-center">
+                                <img
+                                    src={pinned[workflow.id] ? PinnedPin : DefaultPin}
+                                    alt="Pin"
+                                    className="cursor-pointer"
                                     onClick={() => togglePin(workflow.id)}
-                                    size={20}
+                                    width={15}
+                                    height={15}
                                 />
                             </td>
-                            <td className="p-3">
-                                <button className="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700">
-                                    Execute
-                                </button>
+                            <td className="py-5 px-2 max-w-[70px]">
+                                <SmallButton
+                                    label="Execute"
+                                    onClick={(e) => handleExecuteWorkflow(workflow, e)}
+                                />
                             </td>
-                            <td className="p-3">
-                                <button className="bg-gray-500 text-white px-3 py-1 rounded-md hover:bg-gray-600">
-                                    Edit
-                                </button>
+                            <td className="py-5 px-2 max-w-[50px]">
+                                <SmallButton
+                                    label="Edit"
+                                    onClick={(e) => handleEditWorkflow(workflow, e)}
+                                />
                             </td>
-                            <td className="p-3 text-center">
-                                <IoEllipsisVertical className="text-gray-600 cursor-pointer text-lg" />
+                            <td className="py-5 px-2 max-w-[40px]">
+                                <IoEllipsisVertical className="text-[#221F20] cursor-pointer text-lg" />
                             </td>
-                            <td className="p-3 text-center">
-                                <MdKeyboardArrowDown className="text-gray-600 cursor-pointer text-lg" />
+                            <td className="py-5 px-2 max-w-[40px]">
+                                <MdArrowDownward className="text-[#221F20] cursor-pointer text-lg" />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            {showExecuteModal && <WarningModal
+                isOpen={showExecuteModal}
+                onClose={handleCloseModal}
+                onConfirm={handleConfirmExecution}
+                message={`Are you sure you want to execute the process '#${selectedWorkflow?.id}-${selectedWorkflow?.name} '?`}
+            />}
         </div>
     );
 };
