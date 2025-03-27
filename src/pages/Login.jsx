@@ -90,10 +90,10 @@ const Login = () => {
                     <span className="border-t w-1/3 border-gray-300"></span>
                 </div>
 
-                <SocialContainer />
+                <SocialContainer type="login" />
 
                 <p className="text-center mt-6 text-gray-900 text-sm">
-                    New User? <Link to="/signup" className="font-semibold underline hover:text-gray-600">SIGN UP HERE</Link>
+                    New User? <Link to="/signup" className="font-semibold underline hover:text-gray-600">SIGN UP FREE</Link>
                 </p>
             </div>
         </AuthLayout>
