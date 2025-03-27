@@ -3,10 +3,9 @@ import React from "react";
 const AddWorkflowButton = ({ onClick }) => {
   return (
     <button
-      className="bg-black text-white px-5 py-2 rounded-lg shadow-md hover:bg-gray-800 transition-all cursor-pointer"
+      className="bg-[#221F20] text-white text-[12px] px-3 py-1.5 rounded-lg shadow-md hover:bg-[#221F20]/80 transition-all cursor-pointer"
       onClick={onClick}
-    >
-      + Create New Process
+    > + Create New Process
     </button>
   );
 };
