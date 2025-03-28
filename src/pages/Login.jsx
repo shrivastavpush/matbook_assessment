@@ -7,8 +7,8 @@ import SocialContainer from "../components/Auth/SocialContainer";
 import Button from "../components/Button";
 
 const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("test@user.com");
+    const [password, setPassword] = useState("Test@1234");
     const [errors, setErrors] = useState({});
     const [error, setError] = useState(null);
     const { login } = useAuth();
