@@ -32,7 +32,7 @@ const Login = () => {
         e.preventDefault();
         setError(null);
 
-        if (!validateForm()) return; // Stop submission if validation fails
+        if (!validateForm()) return;
 
         try {
             await login(email, password);
@@ -44,52 +44,57 @@ const Login = () => {
 
     return (
         <AuthLayout>
-            <div className="bg-gray-50 shadow-lg rounded-lg p-8 w-full max-w-md">
+            <div className="bg-gray-50 shadow-lg rounded-lg p-6 md:p-8 w-full max-w-md mx-auto">
                 <div className="flex flex-col items-start mb-6">
                     <p className="text-black text-[14px]">Welcome Back!</p>
-                    <p className="text-[26px] font-semibold">Log In to your Account</p>
+                    <p className="text-[26px] font-semibold">Log In to Your Account</p>
                 </div>
 
-                {/* Display global login error */}
-                {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+                {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
 
-                <form onSubmit={handleLogin}>
+                <form onSubmit={handleLogin} className="space-y-4">
                     {/* Email Input */}
-                    <Input
-                        label="Email"
-                        value={email}
-                        setValue={setEmail}
-                        type="email"
-                        placeholder="Enter your email"
-                    />
-                    {errors.email && <p className="text-red-500 text-xs mb-2">{errors.email}</p>}
+                    <div>
+                        <Input
+                            label="Email"
+                            value={email}
+                            setValue={setEmail}
+                            type="email"
+                            placeholder="Enter your email"
+                        />
+                        {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                    </div>
 
                     {/* Password Input */}
-                    <Input
-                        label="Password"
-                        value={password}
-                        setValue={setPassword}
-                        type="password"
-                        placeholder="Enter your password"
-                    />
-                    {errors.password && <p className="text-red-500 text-xs mb-2">{errors.password}</p>}
+                    <div>
+                        <Input
+                            label="Password"
+                            value={password}
+                            setValue={setPassword}
+                            type="password"
+                            placeholder="Enter your password"
+                        />
+                        {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+                    </div>
 
-                    <div className="flex justify-between items-center mb-6">
+                    <div className="flex justify-between items-center mb-4">
                         <label className="flex items-center text-gray-600 text-sm cursor-pointer">
                             <input type="checkbox" className="mr-2 accent-red-500" /> Remember me
                         </label>
                         <Link to="/forgot-password" className="text-sm hover:underline">Forgot Password?</Link>
                     </div>
 
-                    <Button type="submit" className="cursor-pointer" label="Log In" />
+                    <Button type="submit" className="cursor-pointer w-full" label="Log In" />
                 </form>
 
+                {/* Divider */}
                 <div className="my-6 flex items-center justify-center">
                     <span className="border-t w-1/3 border-gray-300"></span>
                     <span className="px-3 text-black text-sm font-bold">Or</span>
                     <span className="border-t w-1/3 border-gray-300"></span>
                 </div>
 
+                {/* Social Login */}
                 <SocialContainer type="login" />
 
                 <p className="text-center mt-6 text-gray-900 text-sm">

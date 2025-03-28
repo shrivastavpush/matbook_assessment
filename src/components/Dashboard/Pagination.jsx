@@ -6,27 +6,22 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
     if (totalPages <= 1) return null;
 
     const getPageNumbers = () => {
-        const pages = [];
-        if (totalPages <= 5) {
-            for (let i = 1; i <= totalPages; i++) pages.push(i);
-        } else {
-            if (currentPage <= 3) {
-                pages.push(1, 2, 3, "...", totalPages);
-            } else if (currentPage >= totalPages - 2) {
-                pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
-            } else {
-                pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
-            }
-        }
-        return pages;
+        if (totalPages <= 5) return Array.from({ length: totalPages }, (_, i) => i + 1);
+
+        if (currentPage <= 3) return [1, 2, 3, "...", totalPages];
+        if (currentPage >= totalPages - 2) return [1, "...", totalPages - 2, totalPages - 1, totalPages];
+
+        return [1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages];
     };
 
     return (
-        <div className="flex items-center space-x-2">
+        <nav className="flex items-center space-x-2 mt-4" aria-label="Pagination">
             <button
                 className="cursor-pointer px-3 py-1 rounded disabled:opacity-50"
                 onClick={() => onPageChange(currentPage - 1)}
-                disabled={currentPage === 1}>
+                disabled={currentPage === 1}
+                aria-label="Previous Page"
+            >
                 <IoMdArrowDropleft />
             </button>
 
@@ -35,7 +30,10 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
                     key={index}
                     className={`cursor-pointer px-3 py-1 rounded ${page === currentPage ? "bg-orange-100" : ""}`}
                     onClick={() => typeof page === "number" && onPageChange(page)}
-                    disabled={page === "..."}>
+                    disabled={page === "..."}
+                    aria-current={page === currentPage ? "page" : undefined}
+                    aria-label={typeof page === "number" ? `Page ${page}` : "More pages"}
+                >
                     {page}
                 </button>
             ))}
@@ -43,10 +41,12 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, onPageChange }) => 
             <button
                 className="cursor-pointer px-3 py-1 rounded disabled:opacity-50"
                 onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}>
+                disabled={currentPage === totalPages}
+                aria-label="Next Page"
+            >
                 <IoMdArrowDropright />
             </button>
-        </div>
+        </nav>
     );
 };
 

@@ -4,6 +4,7 @@ import SmallButton from "../SmallButton";
 
 const WarningModal = ({ isOpen, onClose, onConfirm, message }) => {
     const modalRef = useRef(null);
+    const closeButtonRef = useRef(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -14,11 +15,14 @@ const WarningModal = ({ isOpen, onClose, onConfirm, message }) => {
             if (event.key === "Escape") {
                 onClose();
             }
+            if (event.key === "Enter") {
+                onConfirm();
+            }
         };
 
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
-    }, [isOpen, onClose]);
+    }, [isOpen, onClose, onConfirm]);
 
     if (!isOpen) return null;
 
@@ -35,7 +39,9 @@ const WarningModal = ({ isOpen, onClose, onConfirm, message }) => {
                 className="bg-white w-max rounded-lg shadow-lg relative outline-none"
                 tabIndex="-1"
             >
+                {/* Close Button */}
                 <button
+                    ref={closeButtonRef}
                     onClick={onClose}
                     className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 cursor-pointer focus:ring focus:ring-gray-300"
                     aria-label="Close Modal"
@@ -55,7 +61,7 @@ const WarningModal = ({ isOpen, onClose, onConfirm, message }) => {
                 <div className="border-t border-gray-200 shadow-sm"></div>
 
                 <div className="flex justify-end space-x-4 p-4">
-                    <SmallButton label="Yes" onClick={onConfirm} aria-label="Confirm action" />
+                    <SmallButton label="Yes" onClick={onConfirm} aria-label="Confirm action" className="bg-red-600 text-white hover:bg-red-700" />
                     <SmallButton label="No" onClick={onClose} aria-label="Cancel action" />
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 const SearchBar = ({ onSearch }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -10,16 +10,32 @@ const SearchBar = ({ onSearch }) => {
         onSearch(value);
     };
 
+    const clearSearch = () => {
+        setSearchTerm("");
+        onSearch("");
+    };
+
     return (
         <div className="relative w-full max-w-[340px]">
             <input
                 type="text"
                 value={searchTerm}
                 onChange={handleSearch}
-                placeholder="Search By Workflow Name/ID"
-                className="w-full border bg-white border-gray-300/50 rounded-lg pl-4 py-1 text-gray-700 focus:outline-none focus:border-[#88CAD1]/50"
+                placeholder="Search by Workflow Name/ID"
+                aria-label="Search Workflows"
+                className="w-full border bg-white border-gray-300 rounded-lg pl-4 pr-10 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#88CAD1]"
+                onKeyDown={(e) => e.key === "Enter" && onSearch(searchTerm)}
             />
-            <FaSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500/50" />
+            <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+            {searchTerm && (
+                <button
+                    onClick={clearSearch}
+                    className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    aria-label="Clear search"
+                >
+                    <FaTimes />
+                </button>
+            )}
         </div>
     );
 };

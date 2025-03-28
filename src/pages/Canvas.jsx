@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { ReactFlow, Background, Controls, useEdgesState, useNodesState } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import CustomNode from "../components/WorkFlow/CustomNode";
+import CustomNode from "../components/CustomNode";
 import SaveIcon from "../assets/save-btn.svg";
 import SaveWorkflowModal from "../components/Modals/SaveModal";
 
@@ -98,7 +98,7 @@ const WorkflowEditor = ({ onClose }) => {
                         &lt;- Go Back
                     </button>
                     <span className="text-black font-bold">{workflowName}</span>
-                    <button className="text-gray-600 hover:text-gray-800" onClick={() => setShowSaveModal(true)}>
+                    <button className="text-gray-600 hover:text-gray-800 cursor-pointer " onClick={() => setShowSaveModal(true)}>
                         <img src={SaveIcon} alt="Save" />
                     </button>
                 </div>
@@ -131,7 +131,7 @@ const WorkflowEditor = ({ onClose }) => {
                     }}
                     fitView
                 >
-                    <Controls />
+                    <Controls aria-label="Controls" orientation="horizontal" position="bottom-right" />
                     <Background variant="dots" gap={20} size={2} color="#F2E3C3" />
                 </ReactFlow>
             </div>

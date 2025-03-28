@@ -41,6 +41,9 @@ const SaveWorkflowModal = ({ isOpen, onClose, onSave }) => {
         if (e.key === "Escape") {
             onClose();
         }
+        if (e.key === "Enter") {
+            handleSave();
+        }
     };
 
     if (!isOpen) return null;
