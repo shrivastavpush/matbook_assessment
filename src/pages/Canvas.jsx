@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { ReactFlow, Background, Controls, useEdgesState, useNodesState } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import CustomNode from "./CustomNode";
-import SaveIcon from "../../assets/save-btn.svg";
-import SaveWorkflowModal from "../Modals/SaveModal";
+import CustomNode from "../components/WorkFlow/CustomNode";
+import SaveIcon from "../assets/save-btn.svg";
+import SaveWorkflowModal from "../components/Modals/SaveModal";
 
 const initialNodes = [
     {

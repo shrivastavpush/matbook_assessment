@@ -4,7 +4,7 @@ import SearchBar from "../Dashboard/SearchBar";
 import AddWorkflowButton from "../Dashboard/AddWorkFlowButton";
 import WorkflowList from "../Dashboard/WorkflowList";
 import { WorkDataContext } from "../../context/WorkDataContext";
-import WorkflowEditor from "../WorkFLow/Canvas";
+import WorkflowEditor from "../../pages/Canvas";
 
 const DashboardLayout = () => {
     const { workflows } = useContext(WorkDataContext);
