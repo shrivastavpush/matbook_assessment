@@ -7,7 +7,6 @@ const CustomNode = ({ data, id }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const handleDoubleClick = () => {
-        // Prevent editing Start and End nodes
         if (id === '1' || id === '2') return;
         setIsEditing(true);
     };
@@ -15,20 +14,27 @@ const CustomNode = ({ data, id }) => {
     const handleBlur = () => setIsEditing(false);
     const handleChange = (e) => setLabel(e.target.value);
 
+    // Determine if node is Start or End
+    const isStart = id === '1';
+    const isEnd = id === '2';
+    const isSpecialNode = isStart || isEnd;
+
     return (
         <div className={`
-            rounded-lg shadow-md px-4 py-2 min-w-[150px]
-            ${id === '1' ? 'bg-green-500 text-white' :
-                id === '2' ? 'bg-red-500 text-white' :
-                    'bg-white text-gray-800'}
+            ${isSpecialNode
+                ? `w-[80px] h-[80px] rounded-full flex items-center justify-center border-6
+                ${isStart ? 'border-[#849E4C]' : 'border-[#EE3425]'} text-white`
+                : 'bg-[#F7FAEF] border border-[#849E4C] rounded-lg px-6 py-3 min-w-[200px]'
+            }
+            relative
         `}>
             <Handle
                 type="target"
                 position={Position.Top}
-                className="!bg-gray-400 !w-3 !h-3"
+                className="!bg-[#849E4C] !w-2 !h-2"
             />
 
-            <div className="flex items-center justify-between">
+            <div className={`flex ${isSpecialNode ? 'justify-center' : 'justify-between '} items-center w-full`}>
                 {isEditing ? (
                     <input
                         type="text"
@@ -39,27 +45,27 @@ const CustomNode = ({ data, id }) => {
                         className="border p-1 rounded text-sm w-full text-gray-800"
                     />
                 ) : (
-                    <p
-                        onDoubleClick={handleDoubleClick}
-                        className={`text-sm cursor-pointer font-medium py-1
-                            ${id === '1' || id === '2' ? 'cursor-default' : 'cursor-pointer'}
-                        `}
-                    >
-                        {label}
-                    </p>
-                )}
-
-                {id !== '1' && id !== '2' && (
-                    <div className="ml-2 text-gray-400 hover:text-red-500">
-                        <IoTrashOutline size={18} />
+                    <div className={`flex items-center w-full ${isSpecialNode ? `rounded-full justify-center !w-[60px] !h-[60px] ${isStart ? 'bg-[#849E4C]' : 'bg-[#EE3425]'}` : 'justify-between'}`}>
+                        <p
+                            onDoubleClick={handleDoubleClick}
+                            className={`text-sm font-medium
+                                ${isSpecialNode ? 'cursor-default' : 'cursor-pointer'}
+                            `}
+                        >
+                            {label}
+                        </p>
+                        {!isSpecialNode && (
+                            <button className="text-[#EE3425] ml-4">
+                                <IoTrashOutline size={18} />
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
 
             <Handle
                 type="source"
-                position={Position.Bottom}
-                className="!bg-gray-400 !w-3 !h-3"
+                position={isSpecialNode ? isStart ? Position.Bottom : isEnd ? Position.Top : Position.Bottom : Position.Bottom}
             />
         </div>
     );

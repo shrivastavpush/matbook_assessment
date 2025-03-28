@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ReactFlow, Background, Controls, useEdgesState, useNodesState, } from "@xyflow/react";
+import { ReactFlow, Background, Controls, useEdgesState, useNodesState } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import CustomNode from "./CustomNode";
 import SaveIcon from "../../assets/save-btn.svg";
@@ -9,20 +9,18 @@ const initialNodes = [
     {
         id: "1",
         type: "custom",
-        position: { x: 250, y: 100 },
+        position: { x: 250, y: 50 },
         data: { label: "Start" },
-        style: { background: "#4CAF50", color: "white" },
     },
     {
         id: "2",
         type: "custom",
-        position: { x: 250, y: 300 },
+        position: { x: 250, y: 400 },
         data: { label: "End" },
-        style: { background: "#f44336", color: "white" },
     },
 ];
 
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
+const initialEdges = [{ id: "e1-2", source: "1", target: "2", type: 'smoothstep' }];
 
 const nodeTypes = { custom: CustomNode };
 
@@ -35,19 +33,41 @@ const WorkflowEditor = ({ onClose }) => {
 
     const onConnect = useCallback(
         (params) =>
-            setEdges((eds) => [...eds, { ...params, id: `e${params.source}-${params.target}` }]),
+            setEdges((eds) => [...eds, { ...params, id: `e${params.source}-${params.target}`, type: 'smoothstep' }]),
         [setEdges]
     );
 
     const handleAddNode = () => {
-        const newY = 100 + Math.random() * 200;
+        // Calculate the vertical gap between Start and End
+        const startNode = nodes.find(n => n.id === "1");
+        const endNode = nodes.find(n => n.id === "2");
+        const verticalGap = endNode.position.y - startNode.position.y;
+
+        // Calculate new node position
+        const existingNodes = nodes.filter(n => n.id !== "1" && n.id !== "2");
+        const newY = startNode.position.y + (verticalGap / (existingNodes.length + 2));
+
         const newNode = {
             id: `${nodeId}`,
             type: "custom",
             position: { x: 250, y: newY },
-            data: { label: `Process ${nodeId}` },
+            data: { label: "API Call" },
         };
-        setNodes((nds) => [...nds, newNode]);
+
+        // Rearrange existing nodes
+        const updatedNodes = nodes.map(node => {
+            if (node.id === "1" || node.id === "2") return node;
+            const index = existingNodes.findIndex(n => n.id === node.id) + 1;
+            return {
+                ...node,
+                position: {
+                    ...node.position,
+                    y: startNode.position.y + (verticalGap * (index + 1) / (existingNodes.length + 2))
+                }
+            };
+        });
+
+        setNodes([...updatedNodes, newNode]);
         setNodeId((prev) => prev + 1);
     };
 
@@ -77,8 +97,8 @@ const WorkflowEditor = ({ onClose }) => {
                     >
                         &lt;- Go Back
                     </button>
-                    <span className="text-blacks font-bold">{workflowName}</span>
-                    <button className="text-gray-600 hover:text-gray-800" onClick={handleSave}>
+                    <span className="text-black font-bold">{workflowName}</span>
+                    <button className="text-gray-600 hover:text-gray-800" onClick={() => setShowSaveModal(true)}>
                         <img src={SaveIcon} alt="Save" />
                     </button>
                 </div>
@@ -88,14 +108,14 @@ const WorkflowEditor = ({ onClose }) => {
             <div className="absolute bottom-4 right-4 z-10">
                 <button
                     onClick={handleAddNode}
-                    className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 shadow-lg"
+                    className="bg-[#849E4C] text-white w-12 h-12 rounded-full hover:bg-[#6d833e] shadow-lg flex items-center justify-center text-2xl"
                 >
                     +
                 </button>
             </div>
 
             {/* Flow Canvas */}
-            <div className="h-full">
+            <div className="h-full ">
                 <ReactFlow
                     nodes={nodes}
                     edges={edges}
@@ -109,13 +129,13 @@ const WorkflowEditor = ({ onClose }) => {
                             handleDeleteNode(node.id);
                         }
                     }}
+                    fitView
                 >
                     <Controls />
                     <Background variant="dots" gap={20} size={2} color="#F2E3C3" />
                 </ReactFlow>
             </div>
 
-            {/* Save Workflow Modal */}
             <SaveWorkflowModal
                 isOpen={showSaveModal}
                 onClose={() => setShowSaveModal(false)}
