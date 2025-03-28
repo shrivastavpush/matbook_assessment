@@ -4,9 +4,12 @@ import SearchBar from "../Dashboard/SearchBar";
 import AddWorkflowButton from "../Dashboard/AddWorkFlowButton";
 import WorkflowList from "../Dashboard/WorkflowList";
 import { WorkDataContext } from "../../context/WorkDataContext";
+import WorkflowEditor from "../WorkFLow/Canvas";
 
 const DashboardLayout = () => {
-    const { workflows, mockAddWorkflow } = useContext(WorkDataContext);
+    const { workflows } = useContext(WorkDataContext);
+
+    const [showEditor, setShowEditor] = useState(false);
 
     const [filteredWorkflows, setFilteredWorkflows] = useState([]);
 
@@ -25,13 +28,7 @@ const DashboardLayout = () => {
     };
 
     const handleAddWorkflow = () => {
-        const newWorkflow = {
-            id: Math.max(0, ...workflows.map((w) => w.id)) + 1,
-            name: `Workflow ${workflows.length + 1}`,
-            lastEdited: new Date().toISOString().split("T")[0],
-            description: `Description for Workflow ${workflows.length + 1}`,
-        };
-        mockAddWorkflow(newWorkflow);
+        setShowEditor(true);
     };
 
     return (
@@ -44,6 +41,8 @@ const DashboardLayout = () => {
             </div>
 
             <WorkflowList workflows={filteredWorkflows} />
+
+            {showEditor && <WorkflowEditor onClose={() => setShowEditor(false)} />}
         </div>
     );
 };
