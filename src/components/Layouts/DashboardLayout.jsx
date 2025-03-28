@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import Header from "../Dashboard/Header";
 import SearchBar from "../Dashboard/SearchBar";
 import AddWorkflowButton from "../Dashboard/AddWorkFlowButton";
-import WorkflowTable from "../Dashboard/WorkFlowList";
+import WorkflowList from "../Dashboard/WorkflowList";
 import { WorkDataContext } from "../../context/WorkDataContext";
 
 const DashboardLayout = () => {
@@ -43,7 +43,7 @@ const DashboardLayout = () => {
                 <AddWorkflowButton onClick={handleAddWorkflow} />
             </div>
 
-            <WorkflowTable workflows={filteredWorkflows} />
+            <WorkflowList workflows={filteredWorkflows} />
         </div>
     );
 };
