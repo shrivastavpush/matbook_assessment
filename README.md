@@ -9,6 +9,12 @@
 
 ## Features Checklist
 
+### UI/UX
+
+- [✅] Pixel Perfect
+- [✅] Responsive
+- [✅] Added Accessibilty
+
 ### Authentication
 
 - [✅] User login system using Firebase Auth
